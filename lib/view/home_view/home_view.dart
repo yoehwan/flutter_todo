@@ -14,28 +14,19 @@ class HomeView extends StatelessWidget {
   }
 
   Widget body() {
-    return BlocListener<TodoBloc, TodoState>(
-      listenWhen: (pre, curr) {
-        return true;
+    return BlocBuilder<TodoBloc, TodoState>(
+      builder: (BuildContext context, state) {
+        final list = state.todoList;
+        return ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (_, index) {
+            final item = list[index];
+            return ListTile(
+              title: Text(item.title),
+            );
+          },
+        );
       },
-      listener: (context, state) {
-        print("linstener");
-      },
-      child: BlocBuilder<TodoBloc, TodoState>(
-        builder: (BuildContext context, state) {
-          final list = context.read<TodoBloc>().state.todoList;
-          print(list);
-          return ListView.builder(
-            itemCount: list.length,
-            itemBuilder: (_, index) {
-              final item = list[index];
-              return ListTile(
-                title: Text(item.title),
-              );
-            },
-          );
-        },
-      ),
     );
   }
 

@@ -15,7 +15,7 @@ class TodoState extends Equatable {
   final TodosViewStatus status;
   final List<Todo> todoList;
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [status, todoList];
 
   TodoState copyWith({
     TodosViewStatus? status,

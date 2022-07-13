@@ -3,8 +3,10 @@ library todo_bloc;
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/model/todo.dart';
+import 'package:flutter_todo/view/edit_view/edit_view.dart';
 
 part 'todo_state.dart';
 part 'todo_event.dart';
@@ -22,7 +24,15 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
   FutureOr<void> _onCreated(TodoCreated event, Emitter<TodoState> emit) {
     final item = event.item;
-    print(state.todoList);
     emit(state.addItem(item));
+  }
+
+  void onTapTodo({
+    required BuildContext context,
+    required Todo todo,
+  }) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => EditView(todo: todo)),
+    );
   }
 }

@@ -15,13 +15,17 @@ class HomeView extends StatelessWidget {
 
   Widget body() {
     return BlocBuilder<TodoBloc, TodoState>(
-      builder: (BuildContext context, state) {
+      builder: (context, state) {
         final list = state.todoList;
         return ListView.builder(
           itemCount: list.length,
           itemBuilder: (_, index) {
             final item = list[index];
             return ListTile(
+              onTap: () {
+                BlocProvider.of<TodoBloc>(context)
+                    .onTapTodo(todo: item, context: context);
+              },
               title: Text(item.title),
             );
           },
@@ -47,7 +51,7 @@ class HomeView extends StatelessWidget {
                   ),
                 );
           },
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         );
       },
     );

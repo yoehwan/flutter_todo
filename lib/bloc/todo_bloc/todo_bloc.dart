@@ -18,7 +18,11 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<TodoDeleted>(_onDeleted);
   }
 
-  FutureOr<void> _onUpdated(TodoUpdated event, Emitter<TodoState> emit) {}
+  FutureOr<void> _onUpdated(TodoUpdated event, Emitter<TodoState> emit) {
+    // fix to update
+    final item = event.item;
+    emit(state.addItem(item));
+  }
 
   FutureOr<void> _onDeleted(TodoDeleted event, Emitter<TodoState> emit) {}
 
@@ -27,12 +31,11 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     emit(state.addItem(item));
   }
 
-  void onTapTodo({
+  Future<Todo?> onTapTodo({
     required BuildContext context,
     required Todo todo,
-  }) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => EditView(todo: todo)),
-    );
+  }) async {
+    final res = await Navigator.of(context).push(EditView.route(todo));
+    return res;
   }
 }

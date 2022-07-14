@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/bloc/todo_bloc/todo_bloc.dart';
+import 'package:flutter_todo/bloc/edit_bloc/edit_bloc.dart';
 import 'package:flutter_todo/model/todo.dart';
 
 class EditView extends StatefulWidget {
@@ -17,6 +17,15 @@ class EditView extends StatefulWidget {
 
   @override
   State<EditView> createState() => _EditViewState();
+
+  static Route<Todo?> route(Todo todo) {
+    return MaterialPageRoute<Todo?>(
+      builder: (_) => BlocProvider(
+        create: (_) => EditBloc(),
+        child: EditView(todo: todo),
+      ),
+    );
+  }
 }
 
 class _EditViewState extends State<EditView> {
@@ -49,8 +58,9 @@ class _EditViewState extends State<EditView> {
                 title: widget.titleController.text,
                 desc: widget.descController.text,
               );
-              context.read<TodoBloc>().add(TodoUpdated(item));
-              // BlocProvider.of<TodoBloc>(context).add(TodoUpdated(item));
+              BlocProvider.of<EditBloc>(context).add(EditCompleted(item));
+              final currentTodo = BlocProvider.of<EditBloc>(context).state.todo;
+              Navigator.of(context).pop(currentTodo);
             },
             child: Text("Save"),
           ),

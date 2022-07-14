@@ -1,14 +1,12 @@
 class Todo {
-  Todo({
+  const Todo({
     required this.index,
-    required this.title,
-    required this.desc,
-    required this.typeIndex,
+    this.title = "",
+    this.desc = "",
   });
   final int index;
   final String title;
   final String desc;
-  final int typeIndex;
 
   Todo copyWith({
     required String? title,
@@ -18,7 +16,11 @@ class Todo {
       index: index,
       title: title ?? this.title,
       desc: desc ?? this.desc,
-      typeIndex: typeIndex,
     );
+  }
+
+  factory Todo.empty() {
+    final index = DateTime.now().millisecondsSinceEpoch & 0xFFFFFF;
+    return Todo(index: index);
   }
 }

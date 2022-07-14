@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/bloc/todo_bloc/todo_bloc.dart';
-import 'package:flutter_todo/enum/todo_type.dart';
 import 'package:flutter_todo/model/todo.dart';
 
 class HomeView extends StatelessWidget {
@@ -22,9 +21,13 @@ class HomeView extends StatelessWidget {
           itemBuilder: (_, index) {
             final item = list[index];
             return ListTile(
-              onTap: () {
-                BlocProvider.of<TodoBloc>(context)
+              onTap: () async {
+                final res = await BlocProvider.of<TodoBloc>(context)
                     .onTapTodo(todo: item, context: context);
+                if (res != null) {
+                  // it can be bug?
+                  BlocProvider.of<TodoBloc>(context).add(TodoUpdated(res));
+                }
               },
               title: Text(item.title),
             );
@@ -46,7 +49,6 @@ class HomeView extends StatelessWidget {
                       title: '$time',
                       desc: '',
                       index: time,
-                      typeIndex: TodoType.completed.index,
                     ),
                   ),
                 );

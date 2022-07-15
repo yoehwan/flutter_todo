@@ -1,4 +1,6 @@
-class Todo {
+import 'package:equatable/equatable.dart';
+
+class Todo extends Equatable {
   const Todo({
     required this.index,
     this.title = "",
@@ -9,8 +11,8 @@ class Todo {
   final String desc;
 
   Todo copyWith({
-    required String? title,
-    required String? desc,
+    String? title,
+    String? desc,
   }) {
     return Todo(
       index: index,
@@ -19,8 +21,19 @@ class Todo {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'index': index,
+      'title': title,
+      'desc': desc,
+    };
+  }
+
   factory Todo.empty() {
     final index = DateTime.now().millisecondsSinceEpoch & 0xFFFFFF;
     return Todo(index: index);
   }
+
+  @override
+  List<Object?> get props => [index];
 }

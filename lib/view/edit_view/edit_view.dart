@@ -20,10 +20,7 @@ class EditView extends StatefulWidget {
 
   static Route<Todo?> route(Todo todo) {
     return MaterialPageRoute<Todo?>(
-      builder: (_) => BlocProvider(
-        create: (_) => EditBloc(),
-        child: EditView(todo: todo),
-      ),
+      builder: (_) => EditView(todo: todo.copyWith()),
     );
   }
 }
@@ -58,9 +55,7 @@ class _EditViewState extends State<EditView> {
                 title: widget.titleController.text,
                 desc: widget.descController.text,
               );
-              BlocProvider.of<EditBloc>(context).add(EditCompleted(item));
-              final currentTodo = BlocProvider.of<EditBloc>(context).state.todo;
-              Navigator.of(context).pop(currentTodo);
+              Navigator.of(context).pop(item);
             },
             child: Text("Save"),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/bloc/todo_bloc/todo_bloc.dart';
 import 'package:flutter_todo/model/todo.dart';
+import 'package:flutter_todo/view/edit_view/edit_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -14,6 +15,9 @@ class HomeView extends StatelessWidget {
 
   Widget body() {
     return BlocBuilder<TodoBloc, TodoState>(
+      buildWhen: (previous, current) {
+        return current.status==TodosViewStatus.success;
+      },
       builder: (context, state) {
         final list = state.todoList;
         return ListView.builder(
@@ -22,14 +26,15 @@ class HomeView extends StatelessWidget {
             final item = list[index];
             return ListTile(
               onTap: () async {
-                final res = await BlocProvider.of<TodoBloc>(context)
-                    .onTapTodo(todo: item, context: context);
+                final res =
+                    await Navigator.of(context).push(EditView.route(item));
                 if (res != null) {
                   // it can be bug?
                   BlocProvider.of<TodoBloc>(context).add(TodoUpdated(res));
                 }
               },
-              title: Text(item.title),
+              title: Text("Index: ${item.index}"),
+              subtitle: Text("Title: ${item.title}"),
             );
           },
         );

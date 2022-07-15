@@ -12,7 +12,7 @@ part 'todo_state.dart';
 part 'todo_event.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  TodoBloc() : super(const TodoState()) {
+  TodoBloc() : super(TodoState()) {
     on<TodoCreated>(_onCreated);
     on<TodoUpdated>(_onUpdated);
     on<TodoDeleted>(_onDeleted);
@@ -21,14 +21,18 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   FutureOr<void> _onUpdated(TodoUpdated event, Emitter<TodoState> emit) {
     // fix to update
     final item = event.item;
-    emit(state.addItem(item));
+    final list = [...state.todoList];
+    final index = list.indexWhere((e) => e == item);
+    list[index] = item;
+    emit(state.copyWith(status: TodosViewStatus.success, todoList: list));
   }
 
   FutureOr<void> _onDeleted(TodoDeleted event, Emitter<TodoState> emit) {}
 
   FutureOr<void> _onCreated(TodoCreated event, Emitter<TodoState> emit) {
     final item = event.item;
-    emit(state.addItem(item));
+    final list = [...state.todoList, item];
+    emit(state.copyWith(todoList: list));
   }
 
   Future<Todo?> onTapTodo({

@@ -8,10 +8,10 @@ enum TodosViewStatus {
 }
 
 class TodoState extends Equatable {
-  const TodoState({
+  TodoState({
     this.status = TodosViewStatus.initial,
-    this.todoList = const [],
-  });
+    List<Todo>? todoList,
+  }) : todoList = todoList ?? [];
   final TodosViewStatus status;
   final List<Todo> todoList;
   @override
@@ -25,10 +25,5 @@ class TodoState extends Equatable {
       status: status ?? this.status,
       todoList: todoList ?? this.todoList,
     );
-  }
-
-  TodoState addItem(Todo item) {
-    final list = [...todoList, item];
-    return copyWith(todoList: list);
   }
 }

@@ -31,9 +31,9 @@ class Todo extends Equatable {
 
   factory Todo.empty() {
     final index = DateTime.now().millisecondsSinceEpoch & 0xFFFFFF;
-    return Todo(index: index);
+    return Todo(index: index,title: "$index");
   }
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [index,title,desc];
 }

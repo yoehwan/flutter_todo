@@ -16,49 +16,38 @@ class HomeView extends StatelessWidget {
   Widget body() {
     return BlocBuilder<TodoBloc, TodoState>(
       buildWhen: (previous, current) {
-        return current.status==TodosViewStatus.success;
+        return previous != current || current.status == TodosViewStatus.success;
       },
       builder: (context, state) {
+        Widget todoItem(Todo todo) {
+          return ListTile(
+            onTap: () async {
+              Navigator.of(context).push(EditView.route(todo)).then((res) {
+                if (res != null) {
+                  BlocProvider.of<TodoBloc>(context).add(TodoUpdated(res));
+                }
+              });
+            },
+            title: Text("Index: ${todo.index}"),
+            subtitle: Text("Title: ${todo.title}"),
+            trailing: IconButton(
+              onPressed: () {
+                BlocProvider.of<TodoBloc>(context).add(TodoRemoved(todo));
+              },
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+            ),
+          );
+        }
+
         final list = state.todoList;
         return ListView.builder(
           itemCount: list.length,
           itemBuilder: (_, index) {
-            final item = list[index];
-            return ListTile(
-              onTap: () async {
-                final res =
-                    await Navigator.of(context).push(EditView.route(item));
-                if (res != null) {
-                  // it can be bug?
-                  BlocProvider.of<TodoBloc>(context).add(TodoUpdated(res));
-                }
-              },
-              title: Text("Index: ${item.index}"),
-              subtitle: Text("Title: ${item.title}"),
-            );
+            return todoItem(list[index]);
           },
-        );
-      },
-    );
-  }
-
-  Widget floatButton() {
-    return BlocBuilder<TodoBloc, TodoState>(
-      builder: (context, state) {
-        return FloatingActionButton(
-          onPressed: () {
-            final time = DateTime.now().millisecondsSinceEpoch;
-            context.read<TodoBloc>().add(
-                  TodoCreated(
-                    Todo(
-                      title: '$time',
-                      desc: '',
-                      index: time,
-                    ),
-                  ),
-                );
-          },
-          child: const Icon(Icons.add),
         );
       },
     );
@@ -70,6 +59,19 @@ class HomeView extends StatelessWidget {
       appBar: appBar(),
       body: body(),
       floatingActionButton: floatButton(),
+    );
+  }
+
+  Widget floatButton() {
+    return BlocBuilder<TodoBloc, TodoState>(
+      builder: (context, state) {
+        return FloatingActionButton(
+          onPressed: () {
+            BlocProvider.of<TodoBloc>(context).add(TodoCreated(Todo.empty()));
+          },
+          child: const Icon(Icons.add),
+        );
+      },
     );
   }
 }

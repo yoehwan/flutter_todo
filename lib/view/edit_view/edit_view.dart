@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/bloc/edit_bloc/edit_bloc.dart';
 import 'package:flutter_todo/model/todo.dart';
 
 class EditView extends StatefulWidget {

@@ -29,11 +29,20 @@ class Todo extends Equatable {
     };
   }
 
+  factory Todo.fromMap(dynamic map) {
+    final data = Map<String, dynamic>.from(map);
+    return Todo(
+      index: data['index'],
+      title: data['title'],
+      desc: data['desc'],
+    );
+  }
+
   factory Todo.empty() {
     final index = DateTime.now().millisecondsSinceEpoch & 0xFFFFFF;
-    return Todo(index: index,title: "$index");
+    return Todo(index: index, title: "$index");
   }
 
   @override
-  List<Object?> get props => [index,title,desc];
+  List<Object?> get props => [index, title, desc];
 }

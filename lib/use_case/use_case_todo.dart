@@ -6,6 +6,16 @@ class TodoUseCase {
   final TodoRepo repo;
 
   Stream<List<Todo>> todoList() {
-    return repo.todoList();
+    return repo
+        .todoList()
+        .map((list) => list.map((item) => Todo.fromMap(item)).toList());
+  }
+
+  Future<bool> updateTodo(Todo todo) async {
+    return repo.updateTodo(todo.index, todo.toMap());
+  }
+
+  Future<bool> removeTodo(int todoIndex) async {
+    return repo.removeTodo(todoIndex);
   }
 }

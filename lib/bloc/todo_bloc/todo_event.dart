@@ -6,18 +6,21 @@ abstract class TodoEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class TodoInitialized extends TodoEvent {
+  const TodoInitialized();
+}
+
 class TodoUpdated extends TodoEvent {
-  const TodoUpdated (this.item);
+  const TodoUpdated(this.item);
   final Todo item;
 }
 
-class TodoCreated extends TodoEvent{
+class TodoCreated extends TodoEvent {
   const TodoCreated(this.item);
   final Todo item;
-
 }
-class TodoRemoved extends TodoEvent{
+
+class TodoRemoved extends TodoEvent {
   const TodoRemoved(this.item);
   final Todo item;
-
 }

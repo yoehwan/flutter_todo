@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: BlocProvider(
-        create: (_) => TodoBloc(),
+        create: (_) => TodoBloc()..add(const TodoInitialized()),
         child: const HomeView(),
       ),
     );

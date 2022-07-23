@@ -6,9 +6,9 @@ class TodoUseCase {
   final TodoRepo repo;
 
   Stream<List<Todo>> todoList() {
-    return repo
-        .todoList()
-        .map((list) => list.map((item) => Todo.fromMap(item)).toList());
+    return repo.stream().map((event) {
+      return repo.todoList().map((e) => Todo.fromMap(e)).toList();
+    });
   }
 
   Future<bool> updateTodo(Todo todo) async {

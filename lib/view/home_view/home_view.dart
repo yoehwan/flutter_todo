@@ -3,12 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/bloc/todo_bloc/todo_bloc.dart';
 import 'package:flutter_todo/model/todo.dart';
 import 'package:flutter_todo/view/edit_view/edit_view.dart';
+import 'package:flutter_todo/view/search_view/search_view.dart';
+import 'package:flutter_todo/widget/todo_list_tile.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
   AppBar appBar() {
     return AppBar(
+      leading: Builder(builder: (context) {
+        return IconButton(
+          onPressed: () {
+            Navigator.of(context).push(SearchView.route());
+          },
+          icon: const Icon(Icons.search),
+        );
+      }),
       title: const Text("TodoList"),
     );
   }
@@ -20,25 +30,18 @@ class HomeView extends StatelessWidget {
       },
       builder: (context, state) {
         Widget todoItem(Todo todo) {
-          return ListTile(
-            onTap: () async {
+          return TodoListTile(
+            todo: todo,
+            onTapItem: () {
               Navigator.of(context).push(EditView.route(todo)).then((res) {
                 if (res != null) {
                   BlocProvider.of<TodoBloc>(context).add(TodoUpdated(res));
                 }
               });
             },
-            title: Text("Index: ${todo.index}"),
-            subtitle: Text("Title: ${todo.title}"),
-            trailing: IconButton(
-              onPressed: () {
-                BlocProvider.of<TodoBloc>(context).add(TodoRemoved(todo));
-              },
-              icon: const Icon(
-                Icons.delete,
-                color: Colors.red,
-              ),
-            ),
+            onTapDeleted: () {
+              BlocProvider.of<TodoBloc>(context).add(TodoRemoved(todo));
+            },
           );
         }
 

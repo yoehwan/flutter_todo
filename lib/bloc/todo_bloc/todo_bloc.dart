@@ -32,28 +32,15 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     );
   }
 
-  FutureOr<void> _onUpdated(TodoUpdated event, Emitter<TodoState> emit)async {
+  FutureOr<void> _onUpdated(TodoUpdated event, Emitter<TodoState> emit) async {
     await useCase.updateTodo(event.item);
-    // // fix to update
-    // final item = event.item;
-    // final list = [...state.todoList];
-    // final index = list.indexWhere((e) => e.index == item.index);
-    // list[index] = item;
-    // emit(state.copyWith(status: TodosViewStatus.success, todoList: list));
   }
 
-  FutureOr<void> _onRemoved(TodoRemoved event, Emitter<TodoState> emit)async {
+  FutureOr<void> _onRemoved(TodoRemoved event, Emitter<TodoState> emit) async {
     await useCase.removeTodo(event.item.index);
-    // final item = event.item;
-    // final list = [...state.todoList];
-    // list.remove(item);
-    // emit(state.copyWith(status: TodosViewStatus.success, todoList: list));
   }
 
-  FutureOr<void> _onCreated(TodoCreated event, Emitter<TodoState> emit)async {
+  FutureOr<void> _onCreated(TodoCreated event, Emitter<TodoState> emit) async {
     await useCase.updateTodo(event.item);
-    // final item = event.item;
-    // final list = [...state.todoList, item];
-    // emit(state.copyWith(status: TodosViewStatus.success, todoList: list));
   }
 }

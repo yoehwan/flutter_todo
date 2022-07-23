@@ -1,32 +1,29 @@
 import 'dart:async';
 
+import 'package:flutter_todo/data/database/tmp_database.dart';
 import 'package:flutter_todo/repo/todo_repo.dart';
 
 class TodoImpl implements TodoRepo {
-  final Map<dynamic, dynamic> _tmpDBList = {};
+  final TmpDataBase dataBase = TmpDataBase();
 
-  final StreamController<List<dynamic>> _todoListController =
-      StreamController();
+  @override
+  Future init() async {}
 
-  void _notifyStream() {
-    _todoListController.add(_tmpDBList.values.toList());
+  @override
+  Stream<DataEvent> stream() {
+    return dataBase.stream();
   }
 
   @override
-  Future init() async {
-    _notifyStream();
-  }
-
-  @override
-  Stream<List> todoList() {
-    return _todoListController.stream;
+  List<dynamic> todoList() {
+    final list = dataBase.dataList;
+    return list;
   }
 
   @override
   Future<bool> updateTodo(dynamic index, data) async {
     try {
-      _tmpDBList[index] = data;
-      _notifyStream();
+      dataBase.update(index, data);
       return true;
     } catch (e) {
       print(e);
@@ -37,8 +34,7 @@ class TodoImpl implements TodoRepo {
   @override
   Future<bool> removeTodo(dynamic index) async {
     try {
-      _tmpDBList.remove(index);
-      _notifyStream();
+      dataBase.remove(index);
       return true;
     } catch (e) {
       print(e);
